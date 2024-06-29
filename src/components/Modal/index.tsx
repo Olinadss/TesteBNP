@@ -4,6 +4,7 @@ type ModalProps = {
 	children: React.ReactNode
 	title: string
 	isOpen: boolean
+	isConfirm?: boolean
 	onClose?: (type: 'click' | 'esc', target: EventTarget) => void
 	onConfirm?: () => void
 	footer?: {
