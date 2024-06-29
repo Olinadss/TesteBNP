@@ -1,17 +1,17 @@
-import styles from './style.module.css';
+import styles from './style.module.css'
 
 type ModalProps = {
-	children: React.ReactNode;
-	title: string;
-	isOpen: boolean;
-	onClose?: (type: 'click' | 'esc', target: EventTarget) => void;
-	onConfirm?: () => void;
+	children: React.ReactNode
+	title: string
+	isOpen: boolean
+	onClose?: (type: 'click' | 'esc', target: EventTarget) => void
+	onConfirm?: () => void
 	footer?: {
-		hidden?: boolean;
-		confirmText?: string;
-		cancelText?: string;
-	};
-};
+		hidden?: boolean
+		confirmText?: string
+		cancelText?: string
+	}
+}
 
 /* 
 	Modal
@@ -19,23 +19,32 @@ type ModalProps = {
 	- Ao clicar no wrapper do modal, o modal deve ser fechado, porém esta ação deve ser ignorada caso o usuário clique em qualquer elemento dentro do modal
 */
 
-export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props }) => {
+export const Modal: React.FC<ModalProps> = ({
+	children,
+	title,
+	isOpen,
+	...props
+}) => {
 	function handleCloseClick(e: React.MouseEvent) {
-		props.onClose?.('click', e.target);
+		props.onClose?.('click', e.target)
 	}
 
 	function handleConfirmClick(e: React.MouseEvent) {
-		props.onConfirm?.();
+		props.onConfirm?.()
 	}
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-		if (e.key === 'Escape') props.onClose?.('esc', e.target);
+		if (e.key === 'Escape') props.onClose?.('esc', e.target)
 	}
 
-	if (!isOpen) return null;
+	if (!isOpen) return null
 
 	return (
-		<div data-modal-wrapper className={styles.wrapper} onClick={handleCloseClick} onKeyDown={handleKeyDown}>
+		<div
+			data-modal-wrapper
+			className={styles.wrapper}
+			onKeyDown={handleKeyDown}
+		>
 			<div data-modal-container>
 				<header data-modal-header>
 					<h2>{title}</h2>
@@ -53,12 +62,16 @@ export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props 
 							{props.footer?.cancelText ?? 'Cancelar'}
 						</button>
 
-						<button data-modal-confirm onClick={handleConfirmClick} data-type="confirm">
+						<button
+							data-modal-confirm
+							onClick={handleConfirmClick}
+							data-type='confirm'
+						>
 							{props.footer?.confirmText ?? 'Confirmar'}
 						</button>
 					</div>
 				)}
 			</div>
 		</div>
-	);
-};
+	)
+}
