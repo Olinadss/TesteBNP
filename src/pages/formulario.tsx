@@ -9,27 +9,67 @@
  * - Lide com os possíveis erros
  */
 
-import styles from '@/styles/formulario.module.css';
+import styles from '@/styles/formulario.module.css'
+
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
+import { users } from './api/users/create'
+import { useEffect } from 'react'
+
+interface FormData {
+	name: string
+	email: string
+}
+
+const newFormValidationSchema = zod.object({
+	name: zod.string().min(1, { message: 'Informe seu nome' }),
+	email: zod.string().email({ message: 'Informe um e-mail válido' }),
+})
 
 export default function Form() {
-	function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-		event.preventDefault();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<FormData>({
+		resolver: zodResolver(newFormValidationSchema),
+	})
 
-		console.log('submit');
+	async function handleSubmitForm(data: FormData) {
+		const response = await fetch('/api/users/create', {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+
+		console.log('users', response)
 	}
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.content}>
-				<form onSubmit={handleSubmit}>
-					<input type="text" placeholder="Name" />
-					<input type="email" placeholder="E-mail" />
+				<form onSubmit={handleSubmit(handleSubmitForm)}>
+					<input
+						{...register('name', { required: true })}
+						type='text'
+						placeholder='Name'
+					/>
+					{errors.name && <span>{errors.name.message}</span>}
+					<input
+						{...register('email', { required: true })}
+						type='email'
+						placeholder='E-mail'
+					/>
+					{errors.email && <span>{errors.email.message}</span>}
 
-					<button type="submit" data-type="confirm">
+					<button type='submit' data-type='confirm'>
 						Enviar
 					</button>
 				</form>
 			</div>
 		</div>
-	);
+	)
 }

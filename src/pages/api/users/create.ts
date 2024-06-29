@@ -10,12 +10,27 @@
  * - Você deve corrigir a interface IUserCreate em src/types/user.d.ts
  */
 
-import { NextApiRequest, NextApiResponse } from 'next/types';
+import { NextApiRequest, NextApiResponse } from 'next/types'
 
-import { IUser, IUserCreate } from '@/types/user.d';
+import { IUser, IUserCreate } from '@/types/user.d'
 
-const users: IUser[] = [];
+export const users: IUser[] = []
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
-	return res.status(400).json(undefined);
-};
+	const user: IUserCreate = req.body
+
+	if (!user.name || !user.email) {
+		return res.status(400).json({ error: 'Missing name or email' })
+	}
+
+	const newUser: IUser = {
+		id: users.length + 1,
+		...user,
+	}
+
+	users.push(newUser)
+
+	console.log('newUser', newUser)
+
+	return res.status(201).json(newUser)
+}
