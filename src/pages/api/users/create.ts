@@ -30,7 +30,5 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 
 	users.push(newUser)
 
-	console.log('newUser', newUser)
-
 	return res.status(201).json(newUser)
 }

@@ -44,8 +44,6 @@ export default function Form() {
 				'Content-Type': 'application/json',
 			},
 		})
-
-		console.log('users', response)
 	}
 
 	return (
