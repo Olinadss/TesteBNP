@@ -35,6 +35,7 @@ export const getServerSideProps = async () => {
 		props: {
 			list,
 		},
+		revalidate: 60,
 	}
 }
 

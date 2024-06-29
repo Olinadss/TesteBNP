@@ -15,42 +15,46 @@
  * 		no nextjs, você deve resolver este problema.
  */
 
-import { GetServerSideProps } from 'next/types';
+import { GetServerSideProps } from 'next/types'
 
-import styles from '@/styles/ciclo-de-vida.module.css';
-import { Counter } from '@/components/Counter';
-import { useEffect, useState } from 'react';
+import styles from '@/styles/ciclo-de-vida.module.css'
+import { Counter } from '@/components/Counter'
+import { useEffect, useState } from 'react'
 
 type CicloDeVidaProps = {
-	initialCount: number;
-};
+	initialCount: number
+}
 
 export default function CicloDeVida({ initialCount }: CicloDeVidaProps) {
-	const [showCounter, setShowCounter] = useState(false);
-	const [count, setCount] = useState(0);
+	const [showCounter, setShowCounter] = useState(false)
+	const [count, setCount] = useState(initialCount)
 
 	function handleOcultCounterClick() {
-		setShowCounter((prevState) => !prevState);
+		setShowCounter(prevState => !prevState)
+	}
+
+	const handleUnmountCounter = () => {
+		setShowCounter(false)
 	}
 
 	useEffect(() => {
 		window.addEventListener('onCounterMount', (event: CustomEventInit) => {
-			console.log('onCounterMount');
-		});
+			console.log('onCounterMount')
+		})
 
 		window.addEventListener('onCounterUnmount', (event: CustomEventInit) => {
-			console.log('onCounterUnmount');
-		});
+			console.log('onCounterUnmount')
+		})
 
 		window.addEventListener('onCounterUpdate', (event: CustomEventInit) => {
-			console.log('onCounterUpdate');
-		});
-	}, []);
+			console.log('onCounterUpdate')
+		})
+	}, [])
 
 	return (
 		<div className={styles.container}>
 			<div>
-				<button type="button" onClick={handleOcultCounterClick}>
+				<button type='button' onClick={handleOcultCounterClick}>
 					{showCounter ? 'Ocultar contador' : 'Mostrar contador'}
 				</button>
 
@@ -59,19 +63,24 @@ export default function CicloDeVida({ initialCount }: CicloDeVidaProps) {
 						<h1>Exemplo de Ciclo de vida</h1>
 
 						<div data-content>
-							<Counter initialCount={initialCount} />
+							<Counter
+								initialCount={initialCount}
+								onUnmount={handleUnmountCounter}
+							/>
 						</div>
 					</>
 				)}
 			</div>
 		</div>
-	);
+	)
 }
 
-export const getServerSideProps: GetServerSideProps<CicloDeVidaProps> = async () => {
+export const getServerSideProps: GetServerSideProps<
+	CicloDeVidaProps
+> = async () => {
 	return {
 		props: {
 			initialCount: 0,
 		},
-	};
-};
+	}
+}
