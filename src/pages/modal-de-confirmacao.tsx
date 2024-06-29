@@ -44,6 +44,10 @@ export default function Home() {
 				title='Confirmação'
 				onClose={() => setModalIsOpen(false)}
 				onConfirm={handleModalConfirm}
+				footer={{
+					confirmText: 'Confirmar',
+					cancelText: 'Cancelar',
+				}}
 			>
 				{renderModalContent()}
 			</Modal>
