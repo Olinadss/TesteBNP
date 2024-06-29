@@ -6,30 +6,35 @@
  * - Renderizar a lista de usuários
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-import styles from '@/styles/lista.module.css';
-import { IUser } from '@/types/user';
+import styles from '@/styles/lista.module.css'
+import { IUser } from '@/types/user'
 
 export default function Lista() {
-	const [users, setUsers] = useState<Array<IUser>>([]);
+	const [users, setUsers] = useState<Array<IUser>>([])
 
 	async function getUsersList() {
 		try {
-			const response = await fetch('/api/users');
-			const data = await response.json();
+			const response = await fetch('/api/users', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+			const data = await response.json()
 
-			if (!response.ok) throw new Error('Erro ao obter os dados');
+			if (!response.ok) throw new Error('Erro ao obter os dados')
 
-			setUsers(data);
+			setUsers(data)
 		} catch (error) {
-			console.error(error);
+			console.error(error)
 		}
 	}
 
 	useEffect(() => {
-		getUsersList();
-	}, []);
+		getUsersList()
+	}, [])
 
 	return (
 		<div className={styles.container}>
@@ -37,10 +42,13 @@ export default function Lista() {
 				<h2>Lista de usuários</h2>
 
 				<div data-list-container>
-					{/* Exemplo */}
-					<div data-list-item>ID 323 - Usuário 323 (user-323@mail.com)</div>
+					{users.map(user => (
+						<div data-list-item key={user.id}>
+							ID {user.id} - {user.name} ({user.email})
+						</div>
+					))}
 				</div>
 			</div>
 		</div>
-	);
+	)
 }
